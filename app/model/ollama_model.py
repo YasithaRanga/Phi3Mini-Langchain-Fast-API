@@ -17,6 +17,7 @@ async def generate_ollama_response(prompt: str, model: str, stream: bool) -> Asy
             for chunk in stream:  # Assuming `stream` is a regular generator
                 yield chunk['message']['content'] # Yield the content part of each streamed chunk
                 await asyncio.sleep(0.1)  # Adjust or remove delay based on actual response time
+                 # Ollama's stream might not support async natively, so convert it using asyncio
         else:
             response = ollama.chat(
                 model=model,
@@ -27,7 +28,6 @@ async def generate_ollama_response(prompt: str, model: str, stream: bool) -> Asy
                     },
                 ])
             yield response['message']['content']
-        # Ollama's stream might not support async natively, so convert it using asyncio
 
     except Exception as e:
         yield f"Error: {str(e)}"  # Stream an error message back to the client
