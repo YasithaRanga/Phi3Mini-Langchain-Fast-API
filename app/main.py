@@ -19,6 +19,13 @@ async def generate_completion(request: Request):
     # StreamingResponse needs a generator function to stream data in chunks
     return StreamingResponse(generate_ollama_response(prompt, model, stream), media_type="text/plain")
    
+@app.get("/")
+async def health_check():
+    """
+    Basic health check endpoint to verify API is running.
+    """
+    return {"status": "API is running!"}
+   
 
 if __name__ == "__main__":
     import uvicorn
